@@ -1,5 +1,5 @@
 from libs import *
-from handlers import *
+from apps.handlers import *
 
 
 async def main():
