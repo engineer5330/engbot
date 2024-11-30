@@ -1,2 +1,5 @@
 TOKEN.txt
 engineeriysDB.sqlite3
+__pycache__
+apps/__pycache__
+apps/db/__pycache__
