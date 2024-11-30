@@ -1,10 +1,19 @@
 import sqlite3
-
+from db.requests import *
 
 connection = sqlite3.connect('engineeriys.db')
 cursor = connection.cursor()
+    
+    
+async def funcsqlasync(tellid):
+    return cursor.execute(f'SELECT name FROM users WHERE idteller = "{tellid}"').fetchall()
 
-cursor.execute('INSERT INTO users (name, password, datareg, iddis, idteller) VALUES (?, ?, ?, ?, ?)', ('newuser', '1234', "2001-12-12", "eng1234", "eng12341"))
+tellid = "engineer5330"
+event_loop = asyncio.get_event_loop()
+event_loop.run_until_complete(funcsqlasync(tellid))
+event_loop.close()
 
-connection.commit()
-connection.close()
+# print(funcsqlasync(tellid))
+
+# connection.commit()
+# connection.close()

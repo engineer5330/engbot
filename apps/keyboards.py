@@ -8,6 +8,12 @@ main = ReplyKeyboardMarkup(keyboard=[
                            input_field_placeholder="Выберите пункт")
 
 
+reg = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Зарегистрироваться')],
+], 
+                           resize_keyboard=True)
+
+
 lk = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="test", callback_data="test")]
 ])
