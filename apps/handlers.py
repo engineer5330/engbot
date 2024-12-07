@@ -154,5 +154,5 @@ async def set_skin1(message: Message, state: FSMContext):
 async def skinlk(callback: CallbackQuery):
     user = await rq.GetData(callback.message.from_user.id)
     user_name = user.name
-    await callback.message.answer_photo(photo='https://www.google.com/imgres?q=%D0%BA%D0%B0%D0%BA%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B8%D1%82%D1%8C%20%D1%84%D0%B0%D0%B9%D0%BB%20python&imgurl=https%3A%2F%2Fcdn.easiio.cn%2F%2Fassets%2Fimages%2Feasiio_page%2Fpython_4.png&imgrefurl=https%3A%2F%2Fwww.easiio.com%2Fru%2Feasiio-delete-a-file-python%2F&docid=VMRab0NeoDzsyM&tbnid=8t2DexxYABxs4M&vet=12ahUKEwif_5OT75WKAxWBQ6QEHQpdDFcQM3oECBwQAA..i&w=640&h=320&hcb=2&ved=2ahUKEwif_5OT75WKAxWBQ6QEHQpdDFcQM3oECBwQAA')
+    await callback.message.answer_photo(photo=f'http://http://engineeriys.ru/bot/files/skins/{user.name}.png')
     await callback.message.answer(f"Ваш скин:\n", reply_markup=kb.skin)
