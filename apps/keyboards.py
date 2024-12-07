@@ -16,6 +16,10 @@ reg = ReplyKeyboardMarkup(keyboard=[
 
 lk = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Изменить имя", callback_data="change_name"), InlineKeyboardButton(text="Изменить пароль", callback_data="chanche_pass")],
-    # [InlineKeyboardButton(text="Скин", callback_data="skin")]
+    [InlineKeyboardButton(text="Скин", callback_data="skin")]
     #[InlineKeyboardButton(text="Плащ", callback_data="cloak")]
+])
+
+skin = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Изменить скин", callback_data="change_Skin")]
 ])

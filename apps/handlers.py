@@ -16,6 +16,10 @@ class changePass(StatesGroup):
     password = State()
     
 
+class setSkin(StatesGroup):
+    skin= State()
+    
+
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     if message.chat.type !='private':
@@ -27,17 +31,25 @@ async def cmd_start(message: types.Message):
             await message.answer(f"Привет {message.from_user.first_name}, чтобы пользовать ботом, нужно сперва зарегестрироваться", reply_markup=kb.reg)
 
 
+# @dp.message(F.document)
+# async def photo_mes(message: types.Message):
+#     photo_id = message.document.file_id
+#     photo_name = message.document.file_name
+    
+#     file = await bot.get_file(photo_id)
+#     file_path = file.file_path
+    
+#     await bot.download_file(file_path, photo_name, chunk_size=99999)
+#     await message.answer(f"{message.document}")
+    
+
+
 @dp.message(F.text == "Личный кабинет")
 async def lk(message: types.Message):
     user = await rq.GetData(message.from_user.id)
     await message.answer(f"Ваш профиль:\nИмя:{user.name}\n", reply_markup=kb.lk)
 
- 
-# @dp.callback_query(F.data == "test")
-# async def catalog(callback: CallbackQuery):
-#     await callback.answer("test")
-#     await callback.message.answer("test")
- 
+
 
 @dp.message(Command('reg'))
 async def reg_one(message: Message, state: FSMContext):
@@ -103,3 +115,44 @@ async def change_Pass1(message: Message, state: FSMContext):
     await rq.changePass(message.from_user.id, hashlib.md5(str(data["password"]).encode()).hexdigest())
     await message.answer(f"Ваше пароль изменён!" ,reply_markup=kb.main)
     await state.clear()
+
+
+
+@dp.callback_query(F.data == "change_Skin")
+async def set_skin(callback: CallbackQuery, state: FSMContext):
+    await state.set_state(setSkin.skin)
+    await callback.message.answer("Отпавьте ваш скин")
+
+
+@dp.message(setSkin.skin)
+async def set_skin1(message: Message, state: FSMContext):
+    await state.update_data(skin = message.document)
+    skin = await state.get_data()
+    skin = skin["skin"]
+    photo_id = skin.file_id
+    skin_name = skin.file_name
+    
+    file = await bot.get_file(photo_id)
+    file_path = file.file_path
+    user = await rq.GetData(message.from_user.id)
+    user_name = user.name
+    
+    await bot.download_file(file_path, f"{user_name}.png", chunk_size=99999)
+    
+    if (os.path.exists(os.path.join("files", "skins", f"{user_name}.png"))):
+        os.remove(os.path.join("files", "skins", f"{user_name}.png"))
+    
+    
+    shutil.move(f"{user_name}.png", os.path.join("files", "skins"))
+    
+    
+    await state.clear()
+    await message.answer(f"Вы добавили скин! \n " ,reply_markup=kb.main)
+
+
+@dp.callback_query(F.data == "skin")
+async def skinlk(callback: CallbackQuery):
+    user = await rq.GetData(callback.message.from_user.id)
+    user_name = user.name
+    await callback.message.answer_photo(photo='https://www.google.com/imgres?q=%D0%BA%D0%B0%D0%BA%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B8%D1%82%D1%8C%20%D1%84%D0%B0%D0%B9%D0%BB%20python&imgurl=https%3A%2F%2Fcdn.easiio.cn%2F%2Fassets%2Fimages%2Feasiio_page%2Fpython_4.png&imgrefurl=https%3A%2F%2Fwww.easiio.com%2Fru%2Feasiio-delete-a-file-python%2F&docid=VMRab0NeoDzsyM&tbnid=8t2DexxYABxs4M&vet=12ahUKEwif_5OT75WKAxWBQ6QEHQpdDFcQM3oECBwQAA..i&w=640&h=320&hcb=2&ved=2ahUKEwif_5OT75WKAxWBQ6QEHQpdDFcQM3oECBwQAA')
+    await callback.message.answer(f"Ваш скин:\n", reply_markup=kb.skin)
