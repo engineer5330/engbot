@@ -152,7 +152,6 @@ async def set_skin1(message: Message, state: FSMContext):
 
 @dp.callback_query(F.data == "skin")
 async def skinlk(callback: CallbackQuery):
-    user = await rq.GetData(callback.message.from_user.id)
-    user_name = user.name
-    await callback.message.answer_photo(photo=f'http://http://engineeriys.ru/bot/files/skins/{user.name}.png')
-    await callback.message.answer(f"Ваш скин:\n", reply_markup=kb.skin)
+    user_name = callback.message.text.replace('Ваш профиль:\nИмя:', '')
+    await callback.message.answer_photo(photo=f'http://engineeriys.ru/bot/files/skins/{user_name}.png')
+    await callback.message.answer(f"Ваш скин\n", reply_markup=kb.skin)
